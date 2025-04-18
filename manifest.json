@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "Auto Tab Grouper",
+    "version": "1.0",
+    "description": "Automatically group tabs by domain.",
+    "permissions": [
+        "tabs",
+        "tabGroups",
+        "storage",
+        "alarms",
+        "system.memory"
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icons/icon.png"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "commands": {
+      "group-tabs": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Y"
+        },
+        "description": "Group tabs by domain"
+      }
+    }
+  }
+  
