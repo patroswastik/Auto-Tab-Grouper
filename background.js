@@ -1,6 +1,14 @@
 // Supported tab group colors
 const tabGroupColors = [
-  "grey", "blue", "red", "yellow", "green", "pink", "purple", "cyan", "orange"
+  "grey",
+  "blue",
+  "red",
+  "yellow",
+  "green",
+  "pink",
+  "purple",
+  "cyan",
+  "orange",
 ];
 
 // Utilities
@@ -15,7 +23,9 @@ let autoGroupInterval = 30; // Default 30 minutes
 chrome.storage.local.get(["groupingInterval"], (res) => {
   autoGroupInterval = res.groupingInterval ?? 30;
   chrome.alarms.clear("autoGroupTabs", () => {
-    chrome.alarms.create("autoGroupTabs", { periodInMinutes: autoGroupInterval });
+    chrome.alarms.create("autoGroupTabs", {
+      periodInMinutes: autoGroupInterval,
+    });
   });
 });
 
@@ -24,8 +34,8 @@ function groupTabsByDomain() {
   chrome.tabs.query({}, (tabs) => {
     const domainMap = {};
 
-    tabs.forEach(tab => {
-      if (!tab.url?.startsWith('http')) return;
+    tabs.forEach((tab) => {
+      if (!tab.url?.startsWith("http")) return;
       const domain = new URL(tab.url).hostname;
       if (!domainMap[domain]) domainMap[domain] = [];
       domainMap[domain].push(tab.id);
@@ -34,9 +44,9 @@ function groupTabsByDomain() {
     Object.entries(domainMap).forEach(([domain, tabIds]) => {
       chrome.tabs.group({ tabIds }, (groupId) => {
         chrome.tabGroups.update(groupId, {
-          title: domain.replace("www.", "").split('.')[0],
+          title: domain.replace("www.", "").split(".")[0],
           color: getRandomColor(),
-          collapsed: true
+          collapsed: true,
         });
       });
     });
@@ -46,7 +56,9 @@ function groupTabsByDomain() {
 // Ungroup all tabs
 function ungroupAllTabs() {
   chrome.tabs.query({}, (tabs) => {
-    const groupedTabs = tabs.filter(tab => tab.groupId !== -1).map(tab => tab.id);
+    const groupedTabs = tabs
+      .filter((tab) => tab.groupId !== -1)
+      .map((tab) => tab.id);
     if (groupedTabs.length > 0) {
       chrome.tabs.ungroup(groupedTabs);
     }
@@ -58,7 +70,7 @@ function removeDuplicateTabs() {
   chrome.tabs.query({}, (tabs) => {
     const windowTabMap = {};
 
-    tabs.forEach(tab => {
+    tabs.forEach((tab) => {
       if (!tab.url?.startsWith("http")) return;
       const windowId = tab.windowId;
       if (!windowTabMap[windowId]) {
@@ -69,9 +81,9 @@ function removeDuplicateTabs() {
 
     const duplicates = [];
 
-    Object.values(windowTabMap).forEach(tabList => {
+    Object.values(windowTabMap).forEach((tabList) => {
       const urlMap = new Map();
-      tabList.forEach(tab => {
+      tabList.forEach((tab) => {
         const cleanURL = tab.url.split("#")[0]; // remove fragment part
         if (urlMap.has(cleanURL)) {
           duplicates.push(tab.id);
@@ -90,7 +102,11 @@ function removeDuplicateTabs() {
 // Message listener from popup
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action === "groupNow") {
-    groupTabsByDomain();
+    chrome.storage.local.get("autoGrouping", (data) => {
+      if (data.autoGrouping ?? true) {
+        groupTabsByDomain();
+      }
+    });
   } else if (msg.action === "ungroupAll") {
     ungroupAllTabs();
   } else if (msg.action === "removeDuplicates") {
@@ -99,7 +115,9 @@ chrome.runtime.onMessage.addListener((msg) => {
     chrome.storage.local.get(["groupingInterval"], (res) => {
       autoGroupInterval = res.groupingInterval ?? 30;
       chrome.alarms.clear("autoGroupTabs", () => {
-        chrome.alarms.create("autoGroupTabs", { periodInMinutes: autoGroupInterval });
+        chrome.alarms.create("autoGroupTabs", {
+          periodInMinutes: autoGroupInterval,
+        });
       });
     });
   }
@@ -108,13 +126,21 @@ chrome.runtime.onMessage.addListener((msg) => {
 // Keyboard shortcut listener
 chrome.commands.onCommand.addListener((command) => {
   if (command === "group-tabs") {
-    groupTabsByDomain();
+    chrome.storage.local.get("autoGrouping", (data) => {
+      if (data.autoGrouping ?? true) {
+        groupTabsByDomain();
+      }
+    });
   }
 });
 
 // Alarm listener for auto-grouping
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "autoGroupTabs") {
-    groupTabsByDomain();
+    chrome.storage.local.get("autoGrouping", (data) => {
+      if (data.autoGrouping ?? true) {
+        groupTabsByDomain();
+      }
+    });
   }
 });

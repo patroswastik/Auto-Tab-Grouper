@@ -1,100 +1,131 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <style>
-    body {
-      width: 250px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 15px;
-      background-color: #f9f9f9;
-    }
-    h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      text-align: center;
-      color: #333;
-    }
-    .button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .button:hover {
-      background-color: #45a049;
-    }
+    <head>
+        <style>
+            body {
+                width: 250px;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                padding: 15px;
+                background-color: #f9f9f9;
+            }
+            h2 {
+                font-size: 18px;
+                margin-bottom: 10px;
+                text-align: center;
+                color: #333;
+            }
+            .button {
+                width: 100%;
+                padding: 10px;
+                margin: 8px 0;
+                border: none;
+                border-radius: 6px;
+                background-color: #4caf50;
+                color: white;
+                font-size: 15px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+            .button:hover {
+                background-color: #45a049;
+            }
 
-    .slider-container {
-    margin-top: 20px;
-  }
-  
-  .slider-label {
-    font-size: 15px;
-    color: #333;
-    margin-bottom: 8px;
-  }
+            .slider-container {
+                margin-top: 20px;
+            }
 
-  .slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 8px;
-    border-radius: 5px;
-    background: linear-gradient(to right, #4CAF50 0%, #4CAF50 50%, #d3d3d3 50%, #d3d3d3 100%);
-    outline: none;
-    transition: background 450ms ease-in;
-    margin-bottom: 5px;
-  }
+            .slider-label {
+                font-size: 15px;
+                color: #333;
+                margin-bottom: 8px;
+            }
 
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
+            .slider {
+                -webkit-appearance: none;
+                width: 100%;
+                height: 8px;
+                border-radius: 5px;
+                background: linear-gradient(
+                    to right,
+                    #4caf50 0%,
+                    #4caf50 50%,
+                    #d3d3d3 50%,
+                    #d3d3d3 100%
+                );
+                outline: none;
+                transition: background 450ms ease-in;
+                margin-bottom: 5px;
+            }
 
-  .slider::-webkit-slider-thumb:hover {
-    background: #45a049;
-  }
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #4caf50;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
 
-  .slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-  }
+            .slider::-webkit-slider-thumb:hover {
+                background: #45a049;
+            }
 
-  .slider-value {
-    text-align: center;
-    font-size: 14px;
-    color: #555;
-  }
-  </style>
-</head>
-<body>
-  <h2>Auto Tab Manager</h2>
-  
-  <button id="groupTabs" class="button">Group Tabs</button>
-  <button id="ungroupTabs" class="button">Ungroup Tabs</button>
-  <button id="removeDuplicates" class="button">Remove Duplicate Tabs</button>
+            .slider::-moz-range-thumb {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #4caf50;
+                cursor: pointer;
+            }
 
-  <div class="slider-container">
-    <div class="slider-label">Auto-Group Interval (minutes)</div>
-    <input type="range" id="groupInterval" class="slider" min="5" max="120" step="5" value="30">
-    <div id="intervalLabel" class="slider-value">Every 30 minutes</div>
-    <button id="applyInterval" class="button" style="margin-top: 8px;">Apply Interval</button>
-  </div>  
+            .slider-value {
+                text-align: center;
+                font-size: 14px;
+                color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Auto Tab Manager</h2>
 
-</body>
-<script src="popup.js"></script>
+        <label
+            style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 12px;
+            "
+        >
+            <span style="font-size: 15px; color: #333"
+                >Enable Auto Grouping</span
+            >
+            <input type="checkbox" id="toggleGroup" />
+        </label>
+
+        <button id="groupTabs" class="button">Group Tabs</button>
+        <button id="ungroupTabs" class="button">Ungroup Tabs</button>
+        <button id="removeDuplicates" class="button">
+            Remove Duplicate Tabs
+        </button>
+
+        <div class="slider-container">
+            <div class="slider-label">Auto-Group Interval (minutes)</div>
+            <input
+                type="range"
+                id="groupInterval"
+                class="slider"
+                min="5"
+                max="120"
+                step="5"
+                value="30"
+            />
+            <div id="intervalLabel" class="slider-value">Every 30 minutes</div>
+            <button id="applyInterval" class="button" style="margin-top: 8px">
+                Apply Interval
+            </button>
+        </div>
+    </body>
+    <script src="popup.js"></script>
 </html>

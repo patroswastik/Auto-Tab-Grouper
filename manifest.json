@@ -3,13 +3,8 @@
   "name": "Auto Tab Grouper",
   "version": "1.0",
   "description": "Automatically group, ungroup, and clean duplicate tabs.",
-  "permissions": [
-    "tabs",
-    "tabGroups",
-    "storage",
-    "alarms",
-    "system.memory"
-  ],
+  "author": "Swastik Patro <patroswastik@gmail.com>and Abhijeet Pawar <abhijeetpawar735343@gmail.com>",
+  "permissions": ["tabs", "tabGroups", "storage", "alarms"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icons/icon.png"
